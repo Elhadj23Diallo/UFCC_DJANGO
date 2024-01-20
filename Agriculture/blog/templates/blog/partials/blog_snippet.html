@@ -1,0 +1,69 @@
+{% load blog_extras %}
+<style>
+
+    .haut {
+        margin: 5px;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 20px;
+        margin: 10px;
+        width: 100%;
+    }
+
+    .card-body {
+        background-color: #222601;
+        flex-grow: 1; /* Permet au contenu de la card-body de prendre toute la hauteur disponible */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card img {
+        max-width: 100%;
+        height: 50%;
+        width: 100%;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .card-text strong {
+        font-weight: bold;
+    }
+
+    .btn {
+        width: 100%;
+        background-color: #592202;
+        color: #3333;
+    }
+</style>
+
+<div class="col-sm-6 col-md-4 col-lg-3 haut">
+    <div class="card shadow">
+        <img src="{{ blog.photo.image.url }}" class="card-img-top" alt="..." >
+        <div class="card-body">
+            <h5 class="card-title">{{ blog.title }}</h5>
+            <p class="card-text">{{ blog.price }}</p>
+            <p class="card-text"><strong>Écrit par {{ blog.contributors.all|join:", " }}</strong></p>
+            <p>{{ blog.date_created|get_posted_at_display }}</p>
+            <button class="btn ted btn-success"><a class="lowercase-text text-white" href="{% url 'view_blog' blog.id %}">Plus de détails</a></button>
+        </div>
+    </div>
+</div>

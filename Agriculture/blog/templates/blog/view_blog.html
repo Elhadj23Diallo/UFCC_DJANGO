@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row mt-5 border border-primary border rounded">
+            <div class="col-md-6">
+                <h2>{{ blog.title }}</h2>
+                <!-- Ajoutez la condition pour vérifier si l'utilisateur actuel est l'auteur de la photo -->
+                {% if perms.blog.change_blog %}
+                    {% if photo.author == user %}
+                        <p><a href="{% url 'edit_blog' blog.id %}">Modifier le billet</a></p>
+                    {% endif %}
+                {% endif %}
+                <img src="{{ blog.photo.image.url }}" class="img-fluid" alt="{{ blog.title }}">
+                <p>{{ blog.photo.caption }}</p>
+                <p>{{ blog.content }}</p>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title bg-white">{{ blog.title }}</div>
+                        <div class="card-title bg-white">{{ blog.price }} GNF</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

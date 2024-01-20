@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+  <!-- commentaires_blog.html -->
+
+<h1>Photo {{ photo.id }}</h1>
+
+<!-- Afficher la photo -->
+<img src="{{ photo.image.url }}" alt="{{ photo.description }}">
+
+<!-- Formulaire pour ajouter un nouveau commentaire -->
+<form method="post" action="{% url 'ajouter_commentaire' photo.id %}">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" value="Ajouter un commentaire">
+</form>
+
+<!-- Afficher les commentaires -->
+{% for commentaire in commentaires %}
+  <div>
+    <p>{{ commentaire.text }}</p>
+    <p>Posté par {{ commentaire.uploader.username }} le {{ commentaire.date_created }}</p>
+
+    <!-- Formulaire pour répondre au commentaire -->
+    <form method="post" action="{% url 'ajouter_commentaire' photo.id %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="hidden" name="parent_comment_id" value="{{ commentaire.id }}">
+      <input type="submit" value="Répondre">
+    </form>
+
+    <!-- Afficher les réponses -->
+    {% for reply in commentaire.replies.all %}
+      <div style="margin-left: 20px;">
+        <p>{{ reply.text }}</p>
+        <p>Posté par {{ reply.uploader.username }} le {{ reply.date_created }}</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endfor %}
+
+
+{% endblock content %}
+

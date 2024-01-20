@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <h2>{{ blog.title }}</h2>
+                <img src="{{ shop.image.url }}" style="border-radius: 20px; height:70%" class="img-fluid" alt="{{ shop.nom }}">
+                <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+                <center>
+                    <div class="box-elementt caché" style="margin-top: 20px;">
+                        <small style="padding: 10px; background-color:blueviolet">Payer Avec Paypal</small>
+                        <div id="paypal-button-container"></div>
+                    </div>
+                </center>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title" style="color: black;">{{ shop.nom }}</div>
+                        <p style="color: black;">{{ shop.caption }}</p>
+                        <div class="card-title" id="priceElement" style="color: black;">{{ shop.price }} GNF</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+
+        if (localStorage.getItem('panier') == null) {
+            var panier = {};
+        } else {
+            panier = JSON.parse(localStorage.getItem('panier'));
+        }
+        var total = 0;
+        var nombre = 0;
+        var itemsList = [];
+    
+        for (item in panier) {
+            let nom = panier[item][1];
+            let quantite = panier[item][0];
+            let prix = panier[item][2];
+            nombre += quantite;
+            total += prix;
+            itemsList.push({
+                'name': 'Commande de ' + nom,
+                'sku': 'item',
+                'price': prix,
+                'currency': 'USD',
+                'quantity': quantite
+            });
+    
+            let itemString = `<li class="list-group-item d-flex justify-content-between bg-secondary">
+            <span class="bg-danger">${nom}</span>
+            <span class="badge badge-warning badge-pill">Nombre de commande: ${quantite}</span>
+            <span class="badge badge-success badge-pill">Prix: ${prix} GNF</span>
+            </li>`;
+            $('#item-list').append(itemString);
+        }
+        let itemNombre = `<li class="list-group-item d-flex justify-content-between">
+            <b class="bg-danger">Prix et Quantité Total: </b>
+            <span class="badge badge-warning badge-pill">Total de commande: ${nombre}</span>
+            <span class="badge badge-success badge-pill">Total: ${total} GNF</span>
+            </li>`;
+        $('#item-list').append(itemNombre);
+        // Met à jour le champ de total avec la valeur correcte
+        $('#id_total').val('GNF ' + total.toFixed(2));
+        $('#items').val(JSON.stringify(panier));
+        console.log(total);
+    // Exemple avec fetch http://votre-backend.com/
+    // JavaScript pour obtenir les clés PayPal depuis le backend
+
+    fetch('/get_paypal_keys/')
+      .then(response => response.json())
+      .then(data => {
+
+        var total = parseFloat('{{shop.price}}').toFixed(2);
+        console.log(total);
+        paypal.Button.render({
+          env: 'sandbox',
+          client: {
+            sandbox: data.sandboxKey
+          },
+          commit: true,
+          payment: function (data, actions) {
+            // Récupérez le montant total directement en utilisant JavaScript
+            // Reste de votre total de paiement
+            return actions.payment.create({
+              payment: {
+                transactions: [
+                  {
+                    amount: { total: total, currency: 'USD' }
+                  }
+                ]
+              }
+            });
+          },
+          onAuthorize: function (data, actions) {
+            return actions.payment.execute().then(function () {
+              // Mettez à jour le champ de transaction_id avec l'ID de transaction PayPal
+              document.getElementById('transaction_id').value = data.paymentID;
+              window.alert('Payment Complete!');
+            });
+          }
+          // ... autres configurations
+        }, '#paypal-button-container');
+      })
+      .catch(error => console.error('Erreur lors de la récupération des clés PayPal:', error));
+    
+    
+    </script>
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

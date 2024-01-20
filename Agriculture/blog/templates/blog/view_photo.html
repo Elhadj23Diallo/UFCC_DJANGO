@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ photo.image.url }}" class="img-fluid" alt="{{ photo.caption }}">
+            </div>
+            <div class="col-md-6">
+                <p>{{ photo.caption }}</p>
+                <a href="{% url 'ajouter_commentaire' photo.id %}" class="btn btn-primary">Ajouter un commentaire</a>
+
+                {% if photo.author == user %}
+                    {% if perms.blog.change_blog %}
+                        <!-- Ajoutez la condition pour vérifier si l'utilisateur actuel est l'auteur de la photo -->
+                        <p><a href="{% url 'edit_photo' photo.id %}">Modifier le billet</a></p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

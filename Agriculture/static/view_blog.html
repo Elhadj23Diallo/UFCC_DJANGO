@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="d-flex">
+
+  <!-- Premiere div -->
+  <div class="col-md-6 view_blog">
+    {% if blog.photo.image %}
+      <img src="{{ blog.photo.image.url }}" class="img-fluid">
+    {% else %}
+      <p>Pas de photo téléchargée à voir. Pensez à télécharger une photo avant !</p>
+    {% endif %}
+    {% if perms.blog.change_blog %}
+      <p><a href="{% url 'edit_blog' blog.id %}">Modifier le billet</a></p>
+      <a href="{% url 'ajouter_commentaire' blog.id %}"> Ajouter Un commentaire</a>
+    {% endif %}
+  </div>
+
+  <!-- Deuxieme div -->
+  <div class="col-md-6 card_view_blog">
+    <h2>{{ blog.title }} hvvvvvvvvvvvvvkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk</h2>
+    <p>{{ blog.photo.caption }} xfh;;;;;;;;;;;;tgjjjjjdddddddddddddddddddddddddddddddddddddddddddddddddddd</p>
+    <p>{{ blog.content }} gccccccccccccccccccccccccccccccccccccccccccc</p>
+    <div id="aa{{blog.id}}" class="card-title bg-white">{{blog.title}}</div>
+    <div id="price{{blog.id}}" class="card-title bg-white">{{blog.price}} GNF</div>
+  </div>
+
+</div>
+
+{% endblock content %}

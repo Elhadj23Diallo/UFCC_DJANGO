@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load blog_extras %}
+
+{% block content %}
+<style>
+  form .btn{
+    display: inline;
+    background-color: blue;
+    border-radius: 15px;
+  }
+  .input-group{
+    display: block;
+    width: 20%;
+  }
+
+  .input-group input{
+    border-radius: 20px;
+  }
+</style>
+
+
+
+    <div class="container " style="margin-bottom: 10%;">
+      <h2>Votre flux</h2>  
+
+      <h3>Votre Boutique en ligne</h3>
+      <form method="GET">
+          <div class="input-group float-center">
+            <div class="form-outline">
+              <input style="width: 150%;" type="text" id="form1" name="search" class="form-control" value="{{search_term}}" placeholder="Rechercher un produit" />
+            </div>
+            <button class="btn text-white px-2 btn_search shadow-0" type="submit">Rechercher</button>
+          </div>
+        </form>
+
+      <div class="row d-flex conteneur shadow mt-auto p-1">
+        {% for instance in page_obj %}
+            {% if instance|model_type == 'Blog' %}
+                {% include 'blog/partials/blog_snippet.html' with blog=instance %}
+            {% elif instance|model_type == 'Photo' %}
+                {% include 'blog/partials/photo_snippet.html' with photo=instance %}
+            {% endif %}
+        {% endfor %}
+        
+    </div>
+    {% include 'partials/page_navigator.html' %}
+  </div>
+</div>
+{% endblock content %}
+
+
+{% block js %}
+  <script type="text/javascript">
+    //pour affcher un test
+    console.log('juste pour tester');
+
+    //gérer le localStorage.getItem(variale local du javascrip) à l'aide d'une condition
+    if(localStorage.getItem('panier') == null){
+      var panier = {}; 
+    }else{
+      panier = JSON.parse(localStorage.getItem('panier'));
+    }
+    //Pour recupérer le click de l'utilisateur
+    $(document).on('click', '.ted', function(){
+      console.log('ajouter');
+
+      //pour recupérer l'identifiant du produit cliquer par l'utilisateur
+      var item_id = this.id.toString();
+      console.log(item_id);
+      // Ajouter le nombre de fois que l'utilisateur clique sur un produit
+      if(panier[item_id] != undefined){
+        quantite = panier[item_id][0] +1;
+        panier[item_id][0] = quantite;
+        panier[item_id][2] += parseFloat(document.getElementById("price"+item_id).innerHTML);
+      }else{
+        quantite = 1;
+        prix = parseFloat(document.getElementById("price"+item_id).innerHTML);
+        nom = document.getElementById("aa"+item_id).innerHTML;
+        panier[item_id] = [quantite, nom, prix];
+      }
+      console.log(panier);
+      //Pour enregistrer la variable panier en localStorage
+      localStorage.setItem('panier', JSON.stringify(panier));
+      //pour ajouter les cliques de l'utilisateur dans le panier
+      document.getElementById("panier").innerHTML = "Panier("+ Object.keys(panier).length+ ")";
+    });
+    //Fonction qui affiche le titre dans le panier
+    AfficherList(panier);
+    //Fonction qui affiche les produits dans le panier
+    function AfficherList(panier){
+      var index = 1;
+      var panierString = "";
+      panierString += '<h5>Voici votre liste</h5>';
+      for(var x in panier){
+        panierString += index;
+        panierString += document.getElementById("aa"+x ).innerHTML +" Quantité: " + panier[x][0] + "<br>";
+        index +=1;
+      }
+      panierString += "<a href='{% url 'checkout'%}' class='btn btn-primary'>Checkout<a>";
+      $('[data-toggle="popover"]').popover();
+      document.getElementById('panier').setAttribute('data-content', panierString);
+    }
+  </script>
+{% endblock js %}

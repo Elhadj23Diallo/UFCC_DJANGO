@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<h3>Votre Boutique en ligne</h3>
+<form method="GET">
+    <div class="input-group float-center">
+      <div class="form-outline">
+        <input type="text" id="form1" name="search" class="form-control" value="{{search_term}}" placeholder="Rechercher un produit" />
+      </div>
+        <button class="btn btn-primary shadow-0" type="submit">Rechercher</button>
+    </div>
+  </form>
+
+    <h2>Téléverser une photo</h2>
+    <form method="post" enctype="multipart/form-data">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit" >Publier</button>
+    </form>
+    <p>Pas encore membre ? <a href="{% url 'signup' %}">Inscrivez-vous maintenant !</a></p>
+{% endblock content %}

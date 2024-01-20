@@ -1,0 +1,120 @@
+{% load static %}
+<html>
+    <head>
+        <title>Unite For A Common Cause</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'fontawesome-free-6.5.1-web/css/all.min.css' %}" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'app.css' %}">
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="logo">
+                <img class="avatar1" src="{% static 'media/logo_ufcc.png' %}">
+                <h6>Unite For A Common Cause</h6>
+            </div>
+            {% if user.is_authenticated %}
+                <p>Salut, {{ user }} !</p>
+                {% if user.profile_photo %}
+                    <img class="avatar" src={{ user.profile_photo.url }} style="height: 30%;">
+                {% else %}
+                    <img class="avatar" src="{% static 'images/default_profile.png'%}">
+                {% endif %}
+                <a href="{% url 'home' %}"><i class="fas fa-home"></i> Accueil</a>
+                <a href="{% url 'photo_feed' %}"><i class="fas fa-images"></i> Annonces </a>
+                {% if perms.blog.add_blog %}
+                    <a href="{% url 'blog_create' %}"><i class="fas fa-edit"></i> Écrire un billet</a>
+                {% endif %}
+                {% if perms.blog.add_photo %}
+                    <a href="{% url 'photo_upload' %}"><i class="fas fa-upload"></i> Publier Une Annonce</a>
+                    <a href="{% url 'create_multiple_photos' %}"><i class="fas fa-file-upload"></i> Publier Plusieurs Annonces</a>
+                {% endif %}
+                <a href="{% url 'follow_users' %}"><i class="fas fa-user-friends"></i> Suivre des utilisateurs</a>
+                <a href="{% url 'shop' %}"><i class="fas fa-shopping-cart"></i> Shop</a>
+                <li class="nav-item">
+                    <button id="panier" type="button" class="btn btn-secondary text-white" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+                      panier(0)
+                    </button>
+                </li>
+                <a href="{% url 'upload_profile_photo' %}"><i class="fas fa-camera"></i> Changer la photo de profil</a>
+                <a href="{% url 'password_change' %}"><i class="fas fa-key"></i> Changer le mot de passe</a>
+                <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
+            {% endif %}
+        </div>
+        <div class="main">
+            {% block content %}
+            
+            {% endblock content %}
+        </div>
+
+
+
+        <style>
+            footer {
+                background-color: #333;
+                color: #fff;
+                text-align: center;
+                padding: 10px;
+                position: fixed;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+            }
+        </style>
+
+
+
+        
+
+        <footer  style="background-color: #333; color: #fff; text-align: center; padding: 5px;">
+            <!-- Facebook -->
+<a href="https://www.facebook.com/profile.php?id=100007658479273&mibextid=ZbWKwL" target="_blank">
+    <i class="fab fa-facebook-f social-icons" style="color: #3b5998;"></i>
+</a>
+
+<!-- Gmail -->
+<a href="mailto:jallohelhadjabdul@gmail.com?subject=Contact%20depuis%20elhadj%20abdourahmane.com" target="_blank">
+    <i class="far fa-envelope social-icons px-3" style="color: #dd4b39;"></i>
+</a>
+
+<!-- Linkedin -->
+<a href="https://www.linkedin.com/in/elhadj-abdourahmane-diallo-0a2367240" target="_blank">
+    <i class="fab fa-linkedin-in social-icons px-3" style="color: #0082ca;"></i>
+</a>
+
+            <!-- Téléphone -->
+<a href="tel:+33758583376">
+    <i class="fas fa-phone-alt social-icons px-3" style="color: #007bff;"></i>
+</a>
+
+
+<!-- Messenger -->
+<a href="https://m.me/100007658479273" target="_blank">
+    <i class="fab fa-facebook-messenger social-icons px-3" style="color: #0084FF;"></i>
+</a>
+
+<!-- Whatsapp -->
+<a href="https://wa.me/611309943" target="_blank">
+    <i class="fab fa-whatsapp social-icons px-3" style="color: #25d366;"></i>
+</a>
+
+   <!-- Whatsapp -->
+<a href="https://elhadj23diallo.github.io/site_elhadj_portfolio/index.html" target="_blank">
+    <b style="font-size: 10px; font-size:14px" class="text-uppercase">En savoir plus sur le développeur</b></i>
+</a>         
+</footer>
+
+    </body>
+    
+    {% block js %}
+    
+    {% endblock js %}
+
+</html>

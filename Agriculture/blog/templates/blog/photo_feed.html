@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <style>
+        form .btn{
+            display: inline;
+            background-color: blue;
+            border-radius: 15px;
+          }
+          .input-group{
+            display: block;
+            width: 20%;
+          }
+        
+          .input-group input{
+            border-radius: 20px;
+          }
+    </style>
+    
+    <h2>Flux de photos</h2>
+    
+    <form method="GET" style="margin-top: 10px;">
+        <div class="input-group float-center">
+          <div class="form-outline">
+            <input type="text" id="form1" name="search" class="form-control" value="{{search_term}}" placeholder="Rechercher un produit" />
+          </div>
+            <button class="btn btn-primary shadow-0" type="submit">Rechercher</button>
+        </div>
+    </form>
+
+<div class="container" style="margin-bottom: 10%;">
+    <div class="row d-flex">
+        {% for photo in page_obj %}
+            {% include 'blog/partials/photo_snippet.html' %}
+        {% endfor %}
+    </div>
+</div>
+        <div style="position:absolute; bottom:0; left:50%; transform:translate(-50%);">
+            {% include 'partials/page_navigator.html' %}
+        </div>
+{% endblock content %}
